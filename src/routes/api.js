@@ -11,7 +11,11 @@ const router = express.Router();
 
 // api endpoints
 router.get('/whoami', function(req, res) {
+<<<<<<< HEAD
   if(req.isAuthenticated()){
+=======
+  if (req.isAuthenticated()){
+>>>>>>> advanced
     res.send(req.user);
   }
   else{
@@ -43,7 +47,11 @@ router.post(
       });
 
       user.set({ last_post: req.body.content });
+<<<<<<< HEAD
       user.save(); // this is OK, because the following lines of code are not reliant on the state of user, so we don't have to shove them in a callback. 
+=======
+      user.save(); //this is OK! the lines below this don't rely on the state of the user, so they don't have to be shoved in a callback.
+>>>>>>> advanced
 
       newStory.save(function(err,story) {
         // configure socketio

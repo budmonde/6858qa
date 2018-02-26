@@ -1,5 +1,9 @@
 // dependencies
 const express = require('express');
+<<<<<<< HEAD
+=======
+
+>>>>>>> advanced
 const router = express.Router();
 
 // public endpoints
