@@ -1,19 +1,17 @@
 function main() {
-  get('/api/whoami', {}, function(user) {
-    renderNavbar(user);
-    renderStories(user);
+  renderNavbar();
+  renderQuestions();
 
-    const socket = io();
+  const socket = io();
 
-    socket.on('post', function(msg) {
-        const storiesDiv = document.getElementById('stories');
-        storiesDiv.prepend(storyDOMObject(msg,user));
-    });
+  socket.on('question', function(questionJSON) {
+      const questionsDiv = document.getElementById('questions');
+      questionsDiv.prepend(questionDOMObject(questionJSON));
+  });
 
-    socket.on('comment', function(msg) {
-      const commentDiv = document.getElementById(msg.parent + '-comments');
-      commentDiv.appendChild(commentDOMObject(msg));
-    });
+  socket.on('response', function(responseJSON) {
+    const responseDiv = document.getElementById(responseJSON.parent + '-responses');
+    responseDiv.appendChild(responseDOMObject(responseJSON));
   });
 }
 

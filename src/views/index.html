@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>News Feed</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <title>6.858 Lecture Live Q&A</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="navbar-brand" href="#">Catbook</div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">6.858 Lecture Live Q&A</a>
+      <div class="ml-auto my-2">
+        <input id="author" class="form-control" type="text" placeholder="Anonymous" />
+      </div>
       <div class="navbar-nav" id="nav-item-container">
         <!-- navbar items are inserted here -->
       </div>
     </nav>
-    <div class="container feed-container">
+    <div class="container questions-container">
       <div class="row">
         <div class="col">
-          <div id="new-story">
-            <!-- new story input inserted here -->
+          <div id="new-question">
+            <!-- new question input inserted here -->
           </div>
         </div>
       </div>
       <div class="row">
-        <div id="stories" class="col">
-          <!-- stories are inserted here -->
+        <div id="questions" class="col">
+          <!-- questions are inserted here -->
         </div>
       </div>
     </div>
     <div id="app"></div>
   </body>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/static/js/api.js"></script>
   <script src="/static/js/navbar.js"></script>
-  <script src="/static/js/feed.js"></script>
+  <script src="/static/js/questions.js"></script>
   <script src="/static/js/index.js"></script>
 </html>

@@ -20,7 +20,7 @@ function get(endpoint, params, successCallback, failureCallback) {
           successCallback(JSON.parse(xhr.responseText));
       } else {
         if (failureCallback)
-        failureCallback(xhr.statusText);
+          failureCallback(xhr.statusText);
       }
     }
   };

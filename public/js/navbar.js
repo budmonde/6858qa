@@ -8,15 +8,4 @@ function newNavbarItem(text, url) {
 }
 
 function renderNavbar(user) {
-  const navbarDiv = document.getElementById('nav-item-container');
-
-  navbarDiv.appendChild(newNavbarItem('Home', '/'));
-
-  // NOTE: this check is a lowkey hack
-  if (user._id !== undefined) {
-    navbarDiv.appendChild(newNavbarItem('Profile', '/u/profile?'+user._id));
-    navbarDiv.appendChild(newNavbarItem('Logout', '/logout'));
-  } else {
-    navbarDiv.appendChild(newNavbarItem('Login', '/auth/google'));
-  }
 }
