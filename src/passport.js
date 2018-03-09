@@ -12,7 +12,7 @@ const passport_parameter = {
   tokenURL: 'https://oidc.mit.edu/token',
   clientID: process.env.MIT_OPENID_ID,
   clientSecret: process.env.MIT_OPENID_SECRET,
-  callbackURL: 'http://localhost:3000/auth/oidc/callback'
+  callbackURL: '/auth/oidc/callback'
 };
 
 const valid_users = [
