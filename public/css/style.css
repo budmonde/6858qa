@@ -5,23 +5,20 @@ body {
   font-weight: 300;
 }
 
-.question {
+.item {
 	margin: 10px 0px;
 }
-.question-creator {
+.item-creator {
   	font-size: 20px;
   	font-weight: 600;
 }
-.question-content {
+.item-content {
 	font-size: 40px;
-}
-.question-responses {
-
 }
 .response-creator {
 	font-weight: 600;
 }
 
-.questions-container {
+.items-container {
 	padding: 1rem 0;
 }

@@ -1,19 +1,31 @@
-function questionDOMObject(questionJSON) {
+function questionDOMObject(questionJSON, user) {
   const card = document.createElement('div');
   card.setAttribute('id', questionJSON._id);
-  card.className = 'question card';
+  card.className = 'item card';
 
   const cardBody = document.createElement('div');
   cardBody.className = 'card-body';
   card.appendChild(cardBody);
 
+  if (user.name) {
+    const cardDelete = document.createElement('button');
+    cardDelete.className = 'close';
+    cardDelete.addEventListener('click', deleteQuestionHandler);
+
+    const deleteSpan = document.createElement('span');
+    deleteSpan.innerHTML = '&times;';
+    cardDelete.appendChild(deleteSpan);
+
+    cardBody.appendChild(cardDelete);
+  }
+
   const creatorSpan = document.createElement('p');
-  creatorSpan.className = 'question-creator card-title';
+  creatorSpan.className = 'item-creator card-title';
   creatorSpan.innerHTML = questionJSON.author;
   cardBody.appendChild(creatorSpan);
 
   const contentSpan = document.createElement('p');
-  contentSpan.className = 'question-content card-text';
+  contentSpan.className = 'item-content card-text';
   contentSpan.innerHTML = questionJSON.content;
   cardBody.appendChild(contentSpan);
 
@@ -23,7 +35,7 @@ function questionDOMObject(questionJSON) {
 
   const responsesDiv = document.createElement('div');
   responsesDiv.setAttribute('id', questionJSON._id + '-responses');
-  responsesDiv.className = 'question-responses';
+  responsesDiv.className = 'item-responses';
   cardFooter.appendChild(responsesDiv);
 
   cardFooter.appendChild(newResponseDOMObject(questionJSON._id));
@@ -31,10 +43,38 @@ function questionDOMObject(questionJSON) {
   return card;
 }
 
-function responseDOMObject(responseJSON) {
+function deleteQuestionHandler() {
+  const proceed = confirm("Are you sure you want to delete this response?");
+  if (!proceed) return;
+  const parentCard = this.parentElement.parentElement;
+  const data = {
+    _id: parentCard.id
+  };
+  post('/api/deletequestion', data, function(res) {
+    if (res.deleted) {
+      parentCard.remove();
+    } else {
+      alert("Delete failed!");
+    }
+  });
+}
+
+function responseDOMObject(responseJSON, user) {
   responseDiv = document.createElement('div');
   responseDiv.setAttribute('id', responseJSON._id);
   responseDiv.className = 'response mb-2';
+
+  if (user.name) {
+    const cardDelete = document.createElement('button');
+    cardDelete.className = 'close';
+    cardDelete.addEventListener('click', deleteResponseHandler);
+
+    const deleteSpan = document.createElement('span');
+    deleteSpan.innerHTML = '&times;';
+    cardDelete.appendChild(deleteSpan);
+
+    responseDiv.appendChild(cardDelete);
+  }
 
   responseCreatorSpan = document.createElement('span');
   responseCreatorSpan.className = 'response-creator';
@@ -47,6 +87,22 @@ function responseDOMObject(responseJSON) {
   responseDiv.appendChild(responseContentSpan);
 
   return responseDiv;
+}
+
+function deleteResponseHandler() {
+  const proceed = confirm("Are you sure you want to delete this response?");
+  if (!proceed) return;
+  const parentSpan = this.parentElement;
+  const data = {
+    _id: parentSpan.id
+  };
+  post('/api/deleteresponse', data, function(res) {
+    if (res.deleted) {
+      parentSpan.remove();
+    } else {
+      alert("Delete failed!");
+    }
+  });
 }
 
 function newResponseDOMObject(parent) {
@@ -83,15 +139,11 @@ function newResponseDOMObject(parent) {
 
 function submitResponseHandler() {
   const responseInput = document.getElementById(this.getAttribute('question-id') + '-response-input');
-  const authorInput = document.getElementById('author').value;
-  const responseAuthor = authorInput !== '' ? authorInput : 'Anonymous';
 
   const data = {
-    author: responseAuthor,
     content: responseInput.value,
     parent: this.getAttribute('question-id')
   };
-  console.log(data);
 
   post('/api/response', data);
   responseInput.value = '';
@@ -123,33 +175,29 @@ function newQuestionDOMObject() {
 
 function submitQuestionHandler() {
   const newQuestionInput = document.getElementById('question-content-input');
-  const authorInput = document.getElementById('author').value;
-  const responseAuthor = authorInput !== '' ? authorInput : 'Anonymous';
 
   const data = {
-    author: responseAuthor,
     content: newQuestionInput.value,
   };
-  console.log(data);
 
   post('/api/question', data);
   newQuestionInput.value = '';
 }
 
-function renderQuestions() {
+function renderQuestions(user) {
   document.getElementById('new-question').appendChild(newQuestionDOMObject());
 
   const questionsDiv = document.getElementById('questions');
   get('/api/questions', {}, function(questionsArr) {
     for (let i = 0; i < questionsArr.length; i++) {
       const currentQuestion = questionsArr[i];
-      questionsDiv.prepend(questionDOMObject(currentQuestion));
+      questionsDiv.prepend(questionDOMObject(currentQuestion, user));
 
       get('/api/response', { 'parent': currentQuestion._id }, function(responsesArr) {
         for (let j = 0; j < responsesArr.length; j++) {
           const currentResponse = responsesArr[j];
           const responseDiv = document.getElementById(currentResponse.parent + '-responses');
-          responseDiv.appendChild(responseDOMObject(currentResponse));
+          responseDiv.appendChild(responseDOMObject(currentResponse, user));
         }
       });
     }

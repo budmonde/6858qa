@@ -8,4 +8,13 @@ function newNavbarItem(text, url) {
 }
 
 function renderNavbar(user) {
+  const navbarDiv = document.getElementById('nav-item-container');
+
+//  navbarDiv.appendChild(newNavbarItem('TA Queue', '/taq'));
+  if (user.name) {
+    navbarDiv.appendChild(newNavbarItem('Hello, ' + user.name, '/#'));
+    navbarDiv.appendChild(newNavbarItem('Logout (Admin)', '/logout'));
+  } else {
+    navbarDiv.appendChild(newNavbarItem('Login (Admin)', '/auth/oidc'));
+  }
 }

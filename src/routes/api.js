@@ -8,6 +8,10 @@ const Response = require('../models/response');
 const router = express.Router();
 
 // api endpoints
+router.get('/whoami', function(req, res) {
+  res.send(req.isAuthenticated() ? req.user : {});
+});
+
 router.get('/questions', function(req, res) {
   Question.find({}, function(err, questions) {
     if (err) console.log(err);
@@ -17,8 +21,9 @@ router.get('/questions', function(req, res) {
 });
 
 router.post('/question', function(req, res) {
+  const user = req.isAuthenticated() ? req.user.name : "Anonymous";
   const newQuestion = new Question({
-    'author': req.body.author,
+    'author': user,
     'content': req.body.content,
   });
   newQuestion.save(function(err,question) {
@@ -29,6 +34,27 @@ router.post('/question', function(req, res) {
 
     res.send({});
   });
+});
+
+router.post('/deletequestion', function(req, res) {
+  if (!req.isAuthenticated()) {
+    // TODO: actually send a client error
+    res.send({
+      deleted: false
+    });
+  } else {
+    const _id = req.body._id;
+    Question.remove({_id: _id}, function(err) {
+      if (err) console.log(err);
+
+      const io = req.app.get('socketio');
+      io.emit('deletequestion', _id);
+
+      res.send({
+        deleted: true
+      });
+    });
+  }
 });
 
 router.get('/response', function(req, res) {
@@ -42,8 +68,9 @@ router.get('/response', function(req, res) {
 });
 
 router.post('/response', function(req, res) {
+  const user = req.isAuthenticated() ? req.user.name : "Anonymous";
   const newResponse = new Response({
-    'author': req.body.author,
+    'author': user,
     'parent': req.body.parent,
     'content': req.body.content,
   });
@@ -58,5 +85,74 @@ router.post('/response', function(req, res) {
   });
 
 });
+
+router.post('/deleteresponse', function(req, res) {
+  if (!req.isAuthenticated()) {
+    // TODO: actually send a client error
+    res.send({
+      deleted: false
+    });
+  } else {
+    const _id = req.body._id;
+    Response.remove({_id: _id}, function(err) {
+      if (err) console.log(err);
+
+      const io = req.app.get('socketio');
+      io.emit('deleteresponse', _id);
+
+      res.send({
+        deleted: true
+      });
+    });
+  }
+});
+
+//router.post('/enqueue', (req, res) => {
+//  console.log(req.body);
+//});
+//
+//router.get('/queue', function(req, res) {
+//  TAQ.find({}, function(err, queuers) {
+//    if (err) console.log(err);
+//
+//    res.send(queuers);
+//  });
+//});
+//
+//router.post('/queue', function(req, res) {
+//  const newQueuer = new Queuer({
+//    'author': req.body.user,
+//    'location': req.body.location,
+//  });
+//  newQuestion.save(function(err,question) {
+//    if (err) console.log(err);
+//
+//    const io = req.app.get('socketio');
+//    io.emit('question', question);
+//
+//    res.send({});
+//  });
+//});
+//
+//router.post('/deletequestion', function(req, res) {
+//  if (!req.isAuthenticated()) {
+//    // TODO: actually send a client error
+//    res.send({
+//      deleted: false
+//    });
+//  } else {
+//    const _id = req.body._id;
+//    Question.remove({_id: _id}, function(err) {
+//      if (err) console.log(err);
+//
+//      const io = req.app.get('socketio');
+//      io.emit('deletequestion', _id);
+//
+//      res.send({
+//        deleted: true
+//      });
+//    });
+//  }
+//});
 
 module.exports = router;
