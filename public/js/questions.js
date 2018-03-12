@@ -141,6 +141,7 @@ function submitResponseHandler() {
   const responseInput = document.getElementById(this.getAttribute('question-id') + '-response-input');
 
   const data = {
+    author: document.getElementById('author') ? document.getElementById('author').value : '',
     content: responseInput.value,
     parent: this.getAttribute('question-id')
   };
@@ -177,8 +178,10 @@ function submitQuestionHandler() {
   const newQuestionInput = document.getElementById('question-content-input');
 
   const data = {
+    author: document.getElementById('author') ? document.getElementById('author').value : '',
     content: newQuestionInput.value,
   };
+  console.log(data);
 
   post('/api/question', data);
   newQuestionInput.value = '';

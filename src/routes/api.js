@@ -9,7 +9,8 @@ const router = express.Router();
 
 // api endpoints
 router.get('/whoami', function(req, res) {
-  res.send(req.isAuthenticated() ? req.user : {});
+  res.send({});
+  //res.send(req.isAuthenticated() ? req.user : {});
 });
 
 router.get('/questions', function(req, res) {
@@ -21,7 +22,8 @@ router.get('/questions', function(req, res) {
 });
 
 router.post('/question', function(req, res) {
-  const user = req.isAuthenticated() ? req.user.name : "Anonymous";
+  //const user = req.isAuthenticated() ? req.user.name : "Anonymous";
+  const user = req.body.author ? req.body.author : "Anonymous";
   const newQuestion = new Question({
     'author': user,
     'content': req.body.content,
@@ -37,24 +39,24 @@ router.post('/question', function(req, res) {
 });
 
 router.post('/deletequestion', function(req, res) {
-  if (!req.isAuthenticated()) {
-    // TODO: actually send a client error
+//  if (!req.isAuthenticated()) {
+//    // TODO: actually send a client error
+//    res.send({
+//      deleted: false
+//    });
+//  } else {
+  const _id = req.body._id;
+  Question.remove({_id: _id}, function(err) {
+    if (err) console.log(err);
+
+    const io = req.app.get('socketio');
+    io.emit('deletequestion', _id);
+
     res.send({
-      deleted: false
+      deleted: true
     });
-  } else {
-    const _id = req.body._id;
-    Question.remove({_id: _id}, function(err) {
-      if (err) console.log(err);
-
-      const io = req.app.get('socketio');
-      io.emit('deletequestion', _id);
-
-      res.send({
-        deleted: true
-      });
-    });
-  }
+  });
+//  }
 });
 
 router.get('/response', function(req, res) {
@@ -68,7 +70,8 @@ router.get('/response', function(req, res) {
 });
 
 router.post('/response', function(req, res) {
-  const user = req.isAuthenticated() ? req.user.name : "Anonymous";
+  //const user = req.isAuthenticated() ? req.user.name : "Anonymous";
+  const user = req.body.author ? req.body.author : "Anonymous";
   const newResponse = new Response({
     'author': user,
     'parent': req.body.parent,
@@ -87,24 +90,24 @@ router.post('/response', function(req, res) {
 });
 
 router.post('/deleteresponse', function(req, res) {
-  if (!req.isAuthenticated()) {
-    // TODO: actually send a client error
+//  if (!req.isAuthenticated()) {
+//    // TODO: actually send a client error
+//    res.send({
+//      deleted: false
+//    });
+//  } else {
+  const _id = req.body._id;
+  Response.remove({_id: _id}, function(err) {
+    if (err) console.log(err);
+
+    const io = req.app.get('socketio');
+    io.emit('deleteresponse', _id);
+
     res.send({
-      deleted: false
+      deleted: true
     });
-  } else {
-    const _id = req.body._id;
-    Response.remove({_id: _id}, function(err) {
-      if (err) console.log(err);
-
-      const io = req.app.get('socketio');
-      io.emit('deleteresponse', _id);
-
-      res.send({
-        deleted: true
-      });
-    });
-  }
+  });
+//  }
 });
 
 //router.post('/enqueue', (req, res) => {

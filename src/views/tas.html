@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>6.858 Lecture Live Q&A</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="shortcut icon" href="/static/no-question.ico" type="image/x-icon">
+    <link rel="icon" href="/static/question.ico" type="image/x-icon">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">6.858 Lecture Live Q&A</a>
+      <div class="ml-auto my-2">
+        <input id="author" class="form-control" type="text" value="TA" />
+      </div>
+      <div class="navbar-nav" id="nav-item-container">
+        <!-- navbar items are inserted here -->
+      </div>
+    </nav>
+    <div class="container questions-container">
+      <div class="row">
+        <div class="col">
+          <div id="new-question">
+            <!-- new question input inserted here -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="questions" class="col">
+          <!-- questions are inserted here -->
+        </div>
+      </div>
+    </div>
+    <div id="app"></div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/navbar.js"></script>
+  <script src="/static/js/questions.js"></script>
+  <script src="/static/js/tas.js"></script>
+</html>

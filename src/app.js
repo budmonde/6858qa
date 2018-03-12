@@ -11,7 +11,7 @@ const socketio = require('socket.io');
 
 // local dependencies
 const db = require('./db');
-const passport = require('./passport');
+//const passport = require('./passport');
 const views = require('./routes/views');
 const api = require('./routes/api');
 
@@ -31,20 +31,20 @@ app.use(session({
 }));
 
 // hook up passport
-app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.initialize());
+//app.use(passport.session());
 
 // set routes
 app.use('/', views);
 app.use('/api', api );
 app.use('/static', express.static('public'));
 
-app.get('/auth/oidc', passport.authenticate('oidc'));
-
-app.get('/auth/oidc/callback', passport.authenticate('oidc', {
-  successRedirect: '/',
-  failureRedirect: '/'
-}));
+//app.get('/auth/oidc', passport.authenticate('oidc'));
+//
+//app.get('/auth/oidc/callback', passport.authenticate('oidc', {
+//  successRedirect: '/',
+//  failureRedirect: '/'
+//}));
 
 // 404 route
 app.use(function(req, res, next) {
